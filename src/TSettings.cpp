@@ -16,8 +16,35 @@ void TSettings::setup(TTimbre* timbre, int accessKey, string label){
 	this->timbre = timbre;
 	settings.setup(accessKey, label);
 	
+	// Background reset
 	settings.addCallback(timbre, &TTimbre::resetBackground, "Reset_Background");
 	
+	// Background threshold
+	settings.addProperty(timbre, &TTimbre::getBackgroundThreshold,
+						 timbre, &TTimbre::setBackgroundThreshold,
+						 "background_threshold",
+						 timbre, &TTimbre::getBackgroundThresholdMin,
+						 timbre, &TTimbre::getBackgroundThresholdMax,
+						 timbre, &TTimbre::getBackgroundThresholdStep,
+						 (int) 128);
+	
+	// Warp size
+	settings.addProperty(timbre, &TTimbre::getWarpWidth,
+						 timbre, &TTimbre::setWarpWidth,
+						 "warp_width",
+						 timbre, &TTimbre::getWarpWidthMin,
+						 timbre, &TTimbre::getWarpWidthMax,
+						 timbre, &TTimbre::getWarpWidthStep,
+						 (int) TIMBRE_INPUT_WIDTH);
+	settings.addProperty(timbre, &TTimbre::getWarpHeight,
+						 timbre, &TTimbre::setWarpHeight,
+						 "warp_height",
+						 timbre, &TTimbre::getWarpHeightMin,
+						 timbre, &TTimbre::getWarpHeightMax,
+						 timbre, &TTimbre::getWarpHeightStep,
+						 (int) TIMBRE_INPUT_HEIGHT);
+	
+	// Warp Coordinates
 	settings.addProperty(timbre, &TTimbre::getWarpTopLeftX,
 						 timbre, &TTimbre::setWarpTopLeftX,
 						 "warp_top_left_x",

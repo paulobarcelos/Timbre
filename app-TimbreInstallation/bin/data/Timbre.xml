@@ -1,10 +1,13 @@
 <Timbre>
-    <warp_top_left_x>82</warp_top_left_x>
-    <warp_top_left_y>28</warp_top_left_y>
-    <warp_top_right_x>896</warp_top_right_x>
-    <warp_top_right_y>56</warp_top_right_y>
-    <warp_bottom_left_x>64</warp_bottom_left_x>
-    <warp_bottom_left_y>487</warp_bottom_left_y>
-    <warp_bottom_right_x>879</warp_bottom_right_x>
-    <warp_bottom_right_y>510</warp_bottom_right_y>
+    <background_threshold>128</background_threshold>
+    <warp_width>960</warp_width>
+    <warp_height>540</warp_height>
+    <warp_top_left_x>0</warp_top_left_x>
+    <warp_top_left_y>0</warp_top_left_y>
+    <warp_top_right_x>960</warp_top_right_x>
+    <warp_top_right_y>0</warp_top_right_y>
+    <warp_bottom_left_x>0</warp_bottom_left_x>
+    <warp_bottom_left_y>540</warp_bottom_left_y>
+    <warp_bottom_right_x>960</warp_bottom_right_x>
+    <warp_bottom_right_y>540</warp_bottom_right_y>
 </Timbre>

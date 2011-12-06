@@ -28,9 +28,11 @@ TTimbre::~TTimbre(){
 void TTimbre::setup(){
 	contourFinder.setMinAreaRadius(10);
 	contourFinder.setMaxAreaRadius(150);
-	contourFinder.setInvert(true);
 	
-	unwarpedImage.allocate(TIMBRE_INPUT_WIDTH, TIMBRE_INPUT_HEIGHT, OF_IMAGE_COLOR);
+	warpWidth = TIMBRE_INPUT_WIDTH;
+	warpHeight = TIMBRE_INPUT_HEIGHT;
+	
+	allocateImages();
 	
 	warpPoints.resize(4);
 }
@@ -50,9 +52,17 @@ void TTimbre::update(ofVideoPlayer input){
 	internalUpdate();
 }
 ///////////////////////////////////////////////////////////////////////////////////
+// allocateImages -----------------------------------------------------------------
+///////////////////////////////////////////////////////////////////////////////////
+void TTimbre::allocateImages(){
+	unwarpedImage.allocate(warpWidth, warpHeight, OF_IMAGE_COLOR);
+	background.reset();
+}
+///////////////////////////////////////////////////////////////////////////////////
 // internalUpdate -----------------------------------------------------------------
 ///////////////////////////////////////////////////////////////////////////////////
 void TTimbre::internalUpdate(){
+
 	// Make sure the input image is in the corect size
 	if(originalImage.getWidth() != TIMBRE_INPUT_WIDTH || originalImage.getHeight() != TIMBRE_INPUT_HEIGHT)
 		originalImage.resize(TIMBRE_INPUT_WIDTH, TIMBRE_INPUT_HEIGHT);
@@ -61,9 +71,7 @@ void TTimbre::internalUpdate(){
 	unwarpPerspective(originalImage, unwarpedImage, warpPoints);
 	unwarpedImage.update();
 	
-	cout << warpPoints<< endl;
-	
-	originalMat = toCv(originalImage);
+	/*originalMat = toCv(originalImage);
 	if(originalMat.channels() == 1) {		
 		greyImage.clone(originalImage);
 	} else if(originalMat.channels() == 3) {
@@ -71,10 +79,10 @@ void TTimbre::internalUpdate(){
 	} else if(originalMat.channels() == 4) {
 		ofxCv::convertColor(originalImage, greyImage, CV_RGBA2GRAY);
 	}
-	greyImage.update();
+	greyImage.update();*/
 	
-	background.update(originalImage, contourImage);
-	contourImage.update();
+	background.update(unwarpedImage, thresholdedForegroundImage);
+	thresholdedForegroundImage.update();
 	contourFinder.findContours(contourImage);	
 }
 ///////////////////////////////////////////////////////////////////////////////////
@@ -83,23 +91,39 @@ void TTimbre::internalUpdate(){
 void TTimbre::draw(){
 	ofPushStyle();
 	ofPushMatrix();
-		ofScale(0.3f, 0.3f);
+		ofScale(0.5f, 0.5f);
 		ofTranslate(0, 0);
-		ofSetColor(0xffffff);
-		originalImage.draw(0,0,TIMBRE_INPUT_WIDTH, TIMBRE_INPUT_HEIGHT);
-		ofSetColor(0xff0000);
+		ofSetHexColor(0xffffff);
+		originalImage.draw(0,0);
+		ofSetHexColor(0xff0000);
 		ofCircle(warpPoints[0].x, warpPoints[0].y, 10);
 		ofCircle(warpPoints[1].x, warpPoints[1].y, 10);
 		ofCircle(warpPoints[2].x, warpPoints[2].y, 10);
 		ofCircle(warpPoints[3].x, warpPoints[3].y, 10);
-		
-		ofTranslate(TIMBRE_INPUT_WIDTH, 0);
-		ofSetColor(0xffffff);
-		unwarpedImage.draw(0,0,TIMBRE_INPUT_WIDTH, TIMBRE_INPUT_HEIGHT);
-		
-		
 	ofPopMatrix();
 	ofPopStyle();
+	
+	ofPushStyle();
+	ofPushMatrix();
+		ofScale(0.5f, 0.5f);
+		ofTranslate(TIMBRE_INPUT_WIDTH, 0);
+		ofSetHexColor(0xffffff);
+		unwarpedImage.draw(0,0);
+	ofPopMatrix();
+	ofPopStyle();
+	
+	ofPushStyle();
+	ofPushMatrix();
+		ofTranslate(0, TIMBRE_INPUT_HEIGHT/2);
+		ofSetHexColor(0xff0000);
+		thresholdedForegroundImage.draw(0,0);
+		ofSetHexColor(0xffffff);
+		contourFinder.draw();
+	ofPopMatrix();
+	ofPopStyle();
+		
+		
+	
 		//unwarpedImage.draw(0,TIMBRE_INPUT_HEIGHT/4,TIMBRE_INPUT_WIDTH/4, TIMBRE_INPUT_HEIGHT/4);
 		//greyImage.draw(TIMBRE_INPUT_WIDTH/4,0,TIMBRE_INPUT_WIDTH/4, TIMBRE_INPUT_HEIGHT/4);
 		//contourImage.draw(TIMBRE_INPUT_WIDTH/2,0,TIMBRE_INPUT_WIDTH/4, TIMBRE_INPUT_HEIGHT/4);
@@ -111,15 +135,29 @@ void TTimbre::draw(){
 	ofPopMatrix();*/
 }
 ///////////////////////////////////////////////////////////////////////////////////
-// setThreshold -------------------------------------------------------------------
+// resetBackground ----------------------------------------------------------------
 ///////////////////////////////////////////////////////////////////////////////////
 void TTimbre::resetBackground(){
 	background.reset();
 }
 ///////////////////////////////////////////////////////////////////////////////////
-// setThreshold -------------------------------------------------------------------
+// setBackgroundThreshold ---------------------------------------------------------
 ///////////////////////////////////////////////////////////////////////////////////
-void TTimbre::setThreshold(unsigned int threshold){
+void TTimbre::setBackgroundThreshold(int threshold){
 	this->threshold = threshold;
 	background.setThresholdValue(threshold);
+}
+///////////////////////////////////////////////////////////////////////////////////
+// setWarpWidth -------------------------------------------------------------------
+///////////////////////////////////////////////////////////////////////////////////
+void TTimbre::setWarpWidth(int width){
+	warpWidth = width;
+	allocateImages();
+}
+///////////////////////////////////////////////////////////////////////////////////
+// setWarpHeight ------------------------------------------------------------------
+///////////////////////////////////////////////////////////////////////////////////
+void TTimbre::setWarpHeight(int height){
+	warpHeight = height;
+	allocateImages();
 }
