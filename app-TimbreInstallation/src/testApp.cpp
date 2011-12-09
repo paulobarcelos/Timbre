@@ -9,7 +9,9 @@ void testApp::setup() {
 						 this, &testApp::getModeMin,
 						 this, &testApp::getModeMax,
 						 this, &testApp::getModeStep,
-						 (int)APP_CAMERA_MODE);
+						 (int)APP_CAMERA_MODE);	
+	settings.addProperty(&settingsX, "Settings_X_Position", 0.f, 10000.f, 1.f, 20.f);
+	settings.addProperty(&settingsY, "Settings_Y_Position", 0.f, 10000.f, 1.f, 20.f);
 	
 	timbre.setup();
 	timbreSettings.setup(&timbre);	
@@ -31,8 +33,8 @@ void testApp::update() {
 void testApp::draw() {
 	ofSetColor(255);
 	timbre.draw();
-	settings.draw(0,0);
-	timbreSettings.draw(0,0);
+	settings.draw(settingsX, settingsY);
+	timbreSettings.draw(settingsX, settingsY);
 }
 
 void testApp::keyPressed(int key) {

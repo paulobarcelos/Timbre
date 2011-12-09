@@ -83,7 +83,7 @@ void TTimbre::internalUpdate(){
 	
 	background.update(unwarpedImage, thresholdedForegroundImage);
 	thresholdedForegroundImage.update();
-	contourFinder.findContours(contourImage);	
+	contourFinder.findContours(thresholdedForegroundImage);
 }
 ///////////////////////////////////////////////////////////////////////////////////
 // draw ---------------------------------------------------------------------------
@@ -96,10 +96,16 @@ void TTimbre::draw(){
 		ofSetHexColor(0xffffff);
 		originalImage.draw(0,0);
 		ofSetHexColor(0xff0000);
-		ofCircle(warpPoints[0].x, warpPoints[0].y, 10);
-		ofCircle(warpPoints[1].x, warpPoints[1].y, 10);
-		ofCircle(warpPoints[2].x, warpPoints[2].y, 10);
-		ofCircle(warpPoints[3].x, warpPoints[3].y, 10);
+		ofFill();
+		ofCircle(warpPoints[0].x, warpPoints[0].y, 2);
+		ofCircle(warpPoints[1].x, warpPoints[1].y, 2);
+		ofCircle(warpPoints[2].x, warpPoints[2].y, 2);
+		ofCircle(warpPoints[3].x, warpPoints[3].y, 2);
+		ofNoFill();
+		ofCircle(warpPoints[0].x, warpPoints[0].y, 20);
+		ofCircle(warpPoints[1].x, warpPoints[1].y, 20);
+		ofCircle(warpPoints[2].x, warpPoints[2].y, 20);
+		ofCircle(warpPoints[3].x, warpPoints[3].y, 20);
 	ofPopMatrix();
 	ofPopStyle();
 	

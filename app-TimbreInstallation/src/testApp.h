@@ -29,6 +29,7 @@ private:
 	ofVideoGrabber	cameraInput;
 	ofVideoPlayer	videoInput;
 	
+	float settingsX, settingsY;
 	ofxKeyboardSettings settings;
 	
 	int		mode;

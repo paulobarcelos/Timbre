@@ -1,3 +1,5 @@
 <App_Settings>
-    <Mode>1</Mode>
+    <Mode>0</Mode>
+    <Settings_X_Position>960</Settings_X_Position>
+    <Settings_Y_Position>0</Settings_Y_Position>
 </App_Settings>
