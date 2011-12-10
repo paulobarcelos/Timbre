@@ -28,6 +28,24 @@ void TSettings::setup(TTimbre* timbre, int accessKey, string label){
 						 timbre, &TTimbre::getBackgroundThresholdStep,
 						 (int) 128);
 	
+	// Contour Min Area
+	settings.addProperty(timbre, &TTimbre::getContourMinArea,
+						 timbre, &TTimbre::setContourMinArea,
+						 "contuor_min_area",
+						 timbre, &TTimbre::getContourMinAreaMin,
+						 timbre, &TTimbre::getContourMinAreaMax,
+						 timbre, &TTimbre::getContourMinAreaStep,
+						 (float) 0);
+	
+	// Contour Max Area
+	settings.addProperty(timbre, &TTimbre::getContourMaxArea,
+						 timbre, &TTimbre::setContourMaxArea,
+						 "contuor_max_area",
+						 timbre, &TTimbre::getContourMaxAreaMin,
+						 timbre, &TTimbre::getContourMaxAreaMax,
+						 timbre, &TTimbre::getContourMaxAreaStep,
+						 (float) 1);
+	
 	// Warp size
 	settings.addProperty(timbre, &TTimbre::getWarpWidth,
 						 timbre, &TTimbre::setWarpWidth,

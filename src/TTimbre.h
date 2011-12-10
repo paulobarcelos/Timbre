@@ -40,6 +40,18 @@ public:
 	int		getBackgroundThresholdMax(){return 255;};
 	int		getBackgroundThresholdStep(){return 1;};
 	
+	void	setContourMinArea(float contourMinArea);
+	float	getContourMinArea(){return contourMinArea;};
+	float	getContourMinAreaMin(){return 0;};
+	float	getContourMinAreaMax(){return 1;};
+	float	getContourMinAreaStep(){return 0.0025;};
+	
+	void	setContourMaxArea(float contourMaxArea);
+	float	getContourMaxArea(){return contourMaxArea;};
+	float	getContourMaxAreaMin(){return 0;};
+	float	getContourMaxAreaMax(){return 1;};
+	float	getContourMaxAreaStep(){return 0.0025;};
+	
 	void	setWarpWidth(int width);
 	int		getWarpWidth(){return warpWidth;};
 	int		getWarpWidthMin(){return 0;};
@@ -106,7 +118,8 @@ private:
 	ofxCv::RunningBackground	background;
 	unsigned int				backgroundThreshold;
 	
-	ofxCv::ContourFinder		contourFinder;	
+	ofxCv::ContourFinder		contourFinder;
+	float						contourMinArea, contourMaxArea;
 	
 	ofImage						originalImage;
 	ofImage						unwarpedImage;

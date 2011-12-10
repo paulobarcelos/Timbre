@@ -10,4 +10,6 @@
     <warp_bottom_left_y>485</warp_bottom_left_y>
     <warp_bottom_right_x>880</warp_bottom_right_x>
     <warp_bottom_right_y>514</warp_bottom_right_y>
+    <contuor_min_area>0.01</contuor_min_area>
+    <contuor_max_area>0.19</contuor_max_area>
 </Timbre>
