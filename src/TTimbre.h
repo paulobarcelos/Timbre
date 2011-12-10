@@ -9,10 +9,15 @@
 #pragma once
 
 #include "ofMain.h"
+#include "TUnit.h"
 #include "ofxCv.h"
 
 #define TIMBRE_INPUT_WIDTH 960
 #define TIMBRE_INPUT_HEIGHT 540
+
+#define TIMBRE_MAX_UNITS 100
+#define TIMBRE_UNIT_WIDTH 100
+#define TIMBRE_UNIT_HEIGHT 100
 
 class TTimbre {
 	
@@ -29,8 +34,8 @@ public:
 	
 	void	resetBackground();
 	
-	void	setBackgroundThreshold(int threshold);
-	int		getBackgroundThreshold(){return threshold;};
+	void	setBackgroundThreshold(int backgroundThreshold);
+	int		getBackgroundThreshold(){return backgroundThreshold;};
 	int		getBackgroundThresholdMin(){return 0;};
 	int		getBackgroundThresholdMax(){return 255;};
 	int		getBackgroundThresholdStep(){return 1;};
@@ -95,21 +100,17 @@ private:
 	void	internalUpdate();
 	void	allocateImages();
 	
-	int		warpWidth, warpHeight;
+	int							warpWidth, warpHeight;
+	vector<ofxCv::Point2f>		warpPoints;
 	
-	ofxCv::ContourFinder		contourFinder;
 	ofxCv::RunningBackground	background;
+	unsigned int				backgroundThreshold;
+	
+	ofxCv::ContourFinder		contourFinder;	
 	
 	ofImage						originalImage;
 	ofImage						unwarpedImage;
 	ofImage						thresholdedForegroundImage;
 	
-	ofImage						greyImage;	
-	ofImage						contourImage;
-	
-	ofxCv::Mat					originalMat;
-	
-	unsigned int threshold;
-	
-	vector<ofxCv::Point2f> warpPoints;	
+	vector<TUnit*>				units;	
 };

@@ -10,17 +10,16 @@
 
 #include "ofMain.h"
 
-class TTUnit {
-	
+class TUnit {
 public:
 	
-	TTUnit();
-	~TTUnit();
+	TUnit();
+	~TUnit();
 	
 	void				setup(int width, int height);
 	void				update();	
-	void				draw();
-	
-private:
+	void				draw(float x, float y);
+
 	ofImage				image;
+	bool				active;
 };

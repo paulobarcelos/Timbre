@@ -35,6 +35,13 @@ void TTimbre::setup(){
 	allocateImages();
 	
 	warpPoints.resize(4);
+	
+	units.resize(TIMBRE_MAX_UNITS);
+	for(int i = 0; i < TIMBRE_MAX_UNITS; i++){
+		TUnit * unit = new TUnit();
+		unit->setup(TIMBRE_UNIT_WIDTH, TIMBRE_UNIT_HEIGHT);
+		units[i] = unit;
+	}
 }
 ///////////////////////////////////////////////////////////////////////////////////
 // update -------------------------------------------------------------------------
@@ -84,6 +91,40 @@ void TTimbre::internalUpdate(){
 	background.update(unwarpedImage, thresholdedForegroundImage);
 	thresholdedForegroundImage.update();
 	contourFinder.findContours(thresholdedForegroundImage);
+	
+	int n = contourFinder.size();
+	for(int i = 0; i < TIMBRE_MAX_UNITS; i++) {
+		bool isActive = false;
+		// Post logic to evalute if countour is valid
+		if (i < n) {
+			isActive = true;
+		}
+		if (isActive) {
+			// smallest rectangle that fits the contour
+			ofPolyline minAreRect = toOf(contourFinder.getMinAreaRect(i));
+			// convert the vertices to ofPoin2f vector
+			vector<ofPoint> unitWarpOfPoints =  minAreRect.getVertices();
+			vector<Point2f> unitWarpPoints;
+			unitWarpPoints.resize(4);
+			unitWarpPoints[0].x = unitWarpOfPoints[0].x;
+			unitWarpPoints[0].y = unitWarpOfPoints[0].y;
+			unitWarpPoints[1].x = unitWarpOfPoints[1].x;
+			unitWarpPoints[1].y = unitWarpOfPoints[1].y;
+			unitWarpPoints[2].x = unitWarpOfPoints[2].x;
+			unitWarpPoints[2].y = unitWarpOfPoints[2].y;
+			unitWarpPoints[3].x = unitWarpOfPoints[3].x;
+			unitWarpPoints[3].y = unitWarpOfPoints[3].y;
+						
+			unwarpPerspective(unwarpedImage, units[i]->image, unitWarpPoints);
+			units[i]->image.update();
+			
+			units[i]->active = true;
+		}
+		else{
+			units[i]->active = false;
+		}
+	}
+
 }
 ///////////////////////////////////////////////////////////////////////////////////
 // draw ---------------------------------------------------------------------------
@@ -127,18 +168,21 @@ void TTimbre::draw(){
 		contourFinder.draw();
 	ofPopMatrix();
 	ofPopStyle();
-		
-		
 	
-		//unwarpedImage.draw(0,TIMBRE_INPUT_HEIGHT/4,TIMBRE_INPUT_WIDTH/4, TIMBRE_INPUT_HEIGHT/4);
-		//greyImage.draw(TIMBRE_INPUT_WIDTH/4,0,TIMBRE_INPUT_WIDTH/4, TIMBRE_INPUT_HEIGHT/4);
-		//contourImage.draw(TIMBRE_INPUT_WIDTH/2,0,TIMBRE_INPUT_WIDTH/4, TIMBRE_INPUT_HEIGHT/4);
-	/*ofPushMatrix();
-	ofScale(0.25, 0.25);
-		ofTranslate(TIMBRE_INPUT_WIDTH/2, 0);
-		ofSetColor(redColor);
-		contourFinder.draw();
-	ofPopMatrix();*/
+	ofPushStyle();
+	ofPushMatrix();
+		ofTranslate(TIMBRE_INPUT_WIDTH, 0);
+		ofSetHexColor(0xffffff);
+		int activeIndex = 0;
+		for(int i = 0; i < TIMBRE_MAX_UNITS; i++) {
+			if (units[i]->active) {
+				units[i]->draw((float)activeIndex * (float)TIMBRE_UNIT_WIDTH, 0);
+				activeIndex++;
+			}
+		}
+	ofPopMatrix();
+	ofPopStyle();
+	
 }
 ///////////////////////////////////////////////////////////////////////////////////
 // resetBackground ----------------------------------------------------------------
@@ -149,9 +193,9 @@ void TTimbre::resetBackground(){
 ///////////////////////////////////////////////////////////////////////////////////
 // setBackgroundThreshold ---------------------------------------------------------
 ///////////////////////////////////////////////////////////////////////////////////
-void TTimbre::setBackgroundThreshold(int threshold){
-	this->threshold = threshold;
-	background.setThresholdValue(threshold);
+void TTimbre::setBackgroundThreshold(int backgroundThreshold){
+	this->backgroundThreshold = backgroundThreshold;
+	background.setThresholdValue(backgroundThreshold);
 }
 ///////////////////////////////////////////////////////////////////////////////////
 // setWarpWidth -------------------------------------------------------------------
